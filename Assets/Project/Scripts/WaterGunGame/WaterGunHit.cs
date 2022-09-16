@@ -28,7 +28,7 @@ public class WaterGunHit : MonoBehaviour
     [SerializeField] private float MaxPressure = 1000f;
     
     
-    private float Goal = 0;
+    private float nbOfParticles = 0;
     private float x,y,z;
     private Vector3 itemSize;
 
@@ -53,10 +53,10 @@ public class WaterGunHit : MonoBehaviour
 
             item.transform.localScale = itemSize;
 
-            Goal++;
+            nbOfParticles++;
 
             Debug.Log("hit");
-            if (Goal == MaxPressure)
+            if (nbOfParticles == MaxPressure)
             {
                 Debug.Log("Finished!");
                 Destroy(item);
