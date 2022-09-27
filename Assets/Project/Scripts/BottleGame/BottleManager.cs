@@ -21,7 +21,7 @@ public class BottleManager : MonoBehaviour
     
 
     private int numberCollected = 0;
-    internal bool itemTriggerActivate = false;
+    internal bool Won = false;
 
 
     private void OnTriggerEnter(Collider other)
@@ -39,7 +39,7 @@ public class BottleManager : MonoBehaviour
     {
         if(numberCollected == numberInScene) 
         {
-            itemTriggerActivate = true;
+            Won = true;
             Debug.Log("You've reached the number of items in the scene");
         }
     }

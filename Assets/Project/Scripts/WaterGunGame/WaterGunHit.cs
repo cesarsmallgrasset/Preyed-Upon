@@ -31,7 +31,7 @@ public class WaterGunHit : MonoBehaviour
     private float nbOfParticles = 0;
     private float x,y,z;
     private Vector3 itemSize;
-
+    internal bool Won = false;
 
 
         private void Start()
@@ -66,7 +66,7 @@ public class WaterGunHit : MonoBehaviour
                     victorySound.Play();
                     this.gameObject.SetActive(false);
                 }
-
+                Won = true;
             }
 
         }
