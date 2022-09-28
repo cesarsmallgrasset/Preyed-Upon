@@ -304,10 +304,11 @@ namespace PluginMaster
                     extruded.transform.position = position;
                     extruded.transform.rotation = rotation;
                     extruded.transform.localScale = obj.transform.lossyScale;
-                    extruded.transform.SetParent(parent, true);
                     if (ExtrudeManager.settings.overwritePrefabLayer)
                         extruded.layer = ExtrudeManager.settings.layer;
-                    Undo.RegisterCreatedObjectUndo(extruded, "Extrude");
+                    const string COMMAND_NAME = "Extrude";
+                    Undo.RegisterCreatedObjectUndo(extruded, COMMAND_NAME);
+                    Undo.SetTransformParent(extruded.transform, parent, COMMAND_NAME);
                     delta += step;
                 } while (Mathf.Abs(delta.x) <= Mathf.Abs(_deltaSnapped.x)
                 && Mathf.Abs(delta.y) <= Mathf.Abs(_deltaSnapped.y)

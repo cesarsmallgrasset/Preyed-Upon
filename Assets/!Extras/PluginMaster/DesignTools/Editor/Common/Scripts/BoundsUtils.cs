@@ -278,9 +278,9 @@ namespace PluginMaster
 
 
         private static void GetDistanceFromCenterRecursive(Transform transform, Quaternion rotation,
-            Vector3 center, out Vector3 minDistance, out Vector3 maxDistance, bool ignoreDissabled = true)
+            Vector3 center, out Vector3 minDistance, out Vector3 maxDistance, bool ignoreDissabled = true, bool recursive = true)
         {
-            var children = transform.GetComponentsInChildren<Transform>(true);
+            var children = recursive ? transform.GetComponentsInChildren<Transform>(true) : new Transform[]{ transform };
             var emptyHierarchy = true;
             maxDistance = MIN_VECTOR3;
             minDistance = MAX_VECTOR3;
@@ -302,13 +302,17 @@ namespace PluginMaster
 
         private static Dictionary<(int, Quaternion), Bounds> _boundsRotDictionary
             = new Dictionary<(int, Quaternion), Bounds>();
-        public static Bounds GetBoundsRecursive(Transform transform, Quaternion rotation, bool ignoreDissabled = true)
+        public static Bounds GetBoundsRecursive(Transform transform, Quaternion rotation, bool ignoreDissabled = true,
+            ObjectProperty property = ObjectProperty.BOUNDING_BOX, bool recursive = true)
         {
+            if(property == ObjectProperty.PIVOT) return new Bounds(transform.position, Vector3.zero);
             var key = (transform.gameObject.GetInstanceID(), rotation);
             if (_boundsRotDictionary.ContainsKey(key)) return _boundsRotDictionary[key];
-            var center = GetBoundsRecursive(transform).center;
+            var center = GetBoundsRecursive(transform, recursive).center;
+            if (property == ObjectProperty.CENTER) return new Bounds(center, Vector3.zero);
             Vector3 maxDistance, minDistance;
-            GetDistanceFromCenterRecursive(transform, rotation, center, out minDistance, out maxDistance, ignoreDissabled);
+            GetDistanceFromCenterRecursive(transform, rotation, center,
+                out minDistance, out maxDistance, ignoreDissabled, recursive);
             var size = maxDistance - minDistance;
             center += rotation * (minDistance + size / 2);
             var bounds = new Bounds(center, size);

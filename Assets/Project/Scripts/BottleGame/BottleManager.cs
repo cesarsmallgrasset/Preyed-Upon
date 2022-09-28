@@ -4,43 +4,70 @@ using UnityEngine;
 
 public class BottleManager : MonoBehaviour
 {
-   
-    [Header("Item")]
+    [SerializeField] private List<GameObject> Bottles, Balls;
+    private List <Transform> BottleRespawn, BallRespawn;
 
-
-    [Tooltip("Adjust to fit the number of bottles currently in the scene")]
-    [SerializeField] internal int numberInScene = 1;
-
-    [Tooltip("Insert the name of the GameObject you are using, make sure it is spelled properly and with punctuations")]
-    [SerializeField] private string itemName;
-
-
-
-
-    //-----------------------------------------------------------------------------------------------------
-    
-
-    private int numberCollected = 0;
+    internal int totalBottles, totalBalls;
     internal bool Won = false;
 
-
-    private void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if(other.gameObject.name.Contains(itemName) )
+        totalBottles = Bottles.Count;
+        totalBalls = Balls.Count;
+
+        for (int i = 0; i < totalBottles; i++)
         {
-            numberCollected++;
-            Debug.Log("Collected" + numberCollected);
-            BottleCounter();
+            BottleRespawn[i].position = Bottles[i].transform.position;
+        }
+        for (int i = 0; i < totalBalls; i++)
+        {
+            BallRespawn[i].position = Balls[i].transform.position;
         }
     }
 
-
-    void BottleCounter()
+    private void OnTriggerEnter(Collider other)
     {
-        if(numberCollected == numberInScene) 
+        if (other.gameObject.name.Contains(Bottles[0].name))
+        {
+            totalBottles--;
+        }
+    }
+    private void OnTriggerExit(Collider _other)
+    {
+        if (_other.gameObject.name.Contains(Balls[0].name))
+        {
+            totalBalls--;
+        }
+    }
+    private void Update()
+    {
+        Victory();
+    }
+
+    void Victory()
+    {
+        if(totalBottles <= 0)
         {
             Won = true;
-            Debug.Log("You've reached the number of items in the scene");
         }
+        if(totalBalls <= 0)
+        {
+            Restart();
+        }
+
+    }
+
+    void Restart()
+    {
+        for(int i = 0; i < Bottles.Count; i++)
+        {
+            Bottles[i].transform.position = BottleRespawn[i].position;
+
+        }
+        for (int i = 0; i < Balls.Count; i++)
+        {
+            Balls[i].transform.position = BallRespawn[i].position;
+        }
+
     }
 }

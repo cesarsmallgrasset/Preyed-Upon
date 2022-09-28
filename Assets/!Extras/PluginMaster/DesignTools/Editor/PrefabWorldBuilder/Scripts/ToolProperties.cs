@@ -44,7 +44,6 @@ namespace PluginMaster
 
         private void OnEnable()
         {
-            //_data = PWBCore.staticData;
             if (BrushManager.settings.paintOnMeshesWithoutCollider) PWBCore.UpdateTempColliders();
             _updateButtonContent
                 = new GUIContent(Resources.Load<Texture2D>("Sprites/Update"), "Update Temp Colliders");
@@ -59,7 +58,6 @@ namespace PluginMaster
 
         private void OnGUI()
         {
-            //_data = PWBCore.staticData;
             if (_instance == null) _instance = this;
             using (var scrollView = new EditorGUILayout.ScrollViewScope(_mainScrollPosition,
                 false, false, GUI.skin.horizontalScrollbar, GUI.skin.verticalScrollbar, GUIStyle.none))
@@ -103,10 +101,13 @@ namespace PluginMaster
         #endregion
 
         #region UNDO
-        [SerializeField] LineData _lineData = LineData.instance;
-        [SerializeField] TilingData _tilingData = TilingData.instance;
-        [SerializeField] MirrorSettings _mirrorSettings = MirrorManager.settings;
-        [SerializeField] ShapeData _shapeData = ShapeData.instance;
+        [SerializeField] private LineData _lineData = LineData.instance;
+        [SerializeField] private TilingData _tilingData = TilingData.instance;
+        [SerializeField] private MirrorSettings _mirrorSettings = MirrorManager.settings;
+        [SerializeField] private ShapeData _shapeData = ShapeData.instance;
+        [SerializeField] private TilingManager _tilingManager = TilingManager.instance as TilingManager;
+        [SerializeField] private ShapeManager _shapeManager = ShapeManager.instance as ShapeManager;
+        [SerializeField] private LineManager _lineManager = LineManager.instance as LineManager;
         public static void RegisterUndo(string commandName)
         {
             if (_instance != null) Undo.RegisterCompleteObjectUndo(_instance, commandName);
@@ -1147,7 +1148,7 @@ namespace PluginMaster
             EditorGUIUtility.labelWidth = 180;
             using (var check = new EditorGUI.ChangeCheckScope())
             {
-                var settings = TilingManager.settings.Clone();
+                var settings = TilingManager.settings;
                 using (new GUILayout.VerticalScope(EditorStyles.helpBox))
                 {
                     settings.mode = (TilingSettings.PaintMode)EditorGUILayout.Popup("Paint mode:",
@@ -1185,7 +1186,6 @@ namespace PluginMaster
                 }
                 if (check.changed)
                 {
-                    TilingManager.settings.Copy(settings);
                     PWBIO.UpdateStroke();
                     SceneView.RepaintAll();
                 }

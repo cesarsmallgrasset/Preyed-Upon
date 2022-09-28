@@ -314,6 +314,8 @@ namespace PluginMaster
         private void SettingsContextMenu()
         {
             var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Refresh"), false, OnPaletteChange);
+            menu.AddSeparator(string.Empty);
             menu.AddItem(new GUIContent(PaletteManager.viewList ? "Grid View" : "List View"), false,
                 () => PaletteManager.viewList = !PaletteManager.viewList);
             if (!PaletteManager.viewList)
@@ -1349,12 +1351,16 @@ namespace PluginMaster
             var tempFilteredBrushList = new List<FilteredBrush>();
             if (!labelFilter.ContainsValue(true))
                 for (int i = 0; i < PaletteManager.selectedPalette.brushes.Length; ++i)
+                {
+                    if (PaletteManager.selectedPalette.brushes[i].containMissingPrefabs) continue;
                     tempFilteredBrushList.Add(new FilteredBrush(PaletteManager.selectedPalette.brushes[i], i));
+                }
             else
             {
                 for (int i = 0; i < PaletteManager.selectedPalette.brushes.Length; ++i)
                 {
                     var brush = PaletteManager.selectedPalette.brushes[i];
+                    if (brush.containMissingPrefabs) continue;
                     bool itemContainsFilter = false;
                     foreach (var item in brush.items)
                     {

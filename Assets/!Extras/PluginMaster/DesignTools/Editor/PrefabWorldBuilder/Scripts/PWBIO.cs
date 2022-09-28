@@ -122,6 +122,7 @@ namespace PluginMaster
             ToolManager.OnToolModeChanged += OnEditModeChanged;
             LineInitializeOnLoad();
             ShapeInitializeOnLoad();
+            TilingInitializeOnLoad();
         }
 
         public static void SaveUnityCurrentTool() => _unityCurrentTool = Tools.current;
@@ -781,14 +782,14 @@ namespace PluginMaster
                 obj.transform.localScale = item.scale;
                 var root = PrefabUtility.GetOutermostPrefabInstanceRoot(obj);
                 item.parent = GetParent(settings, item.prefab.name, true, persistentParentId);
-                if (root != null) root.transform.SetParent(item.parent);
-                else obj.transform.SetParent(item.parent);
                 if (addTempCollider) PWBCore.AddTempCollider(obj);
                 if (!paintedObjects.ContainsKey(persistentParentId))
                     paintedObjects.Add(persistentParentId, new List<GameObject>());
                 paintedObjects[persistentParentId].Add(obj);
                 AddPaintedObject(obj);
                 Undo.RegisterCreatedObjectUndo(obj, commandName);
+                if (root != null) Undo.SetTransformParent(root.transform, item.parent, commandName);
+                else Undo.SetTransformParent(obj.transform, item.parent, commandName);
             }
             if (_paintStroke.Count > 0) BrushstrokeManager.UpdateBrushstroke();
             _paintStroke.Clear();
@@ -939,14 +940,14 @@ namespace PluginMaster
                 => (this.alphamaps, this.size, this.layers) = (alphamaps, size, layers);
         }
         private static Dictionary<int, TerrainDataSimple> _terrainAlphamaps = new Dictionary<int, TerrainDataSimple>();
-        private static bool MouseRaycast(Ray mouseRay, out RaycastHit mouseHit,
+        public static bool MouseRaycast(Ray mouseRay, out RaycastHit mouseHit,
             out GameObject collider, float maxDistance, LayerMask layerMask,
             bool paintOnPalettePrefabs, bool castOnMeshesWithoutCollider, string[] tags = null,
             GameObject[] invisibleExeptions = null, TerrainLayer[] terrainLayers = null)
         {
             mouseHit = new RaycastHit();
             collider = null;
-            bool validHit = Physics.Raycast(mouseRay, out mouseHit, maxDistance, layerMask);
+            bool validHit = Physics.Raycast(mouseRay, out mouseHit, maxDistance, layerMask, QueryTriggerInteraction.Ignore);
             bool physicsHit = validHit;
             if (validHit && !castOnMeshesWithoutCollider)
             {
@@ -968,7 +969,7 @@ namespace PluginMaster
 
             RaycastHit[] hitArray = null;
             GameObject[] colliders = null;
-            if (physicsHit) hitArray = Physics.RaycastAll(mouseRay, maxDistance, layerMask);
+            if (physicsHit) hitArray = Physics.RaycastAll(mouseRay, maxDistance, layerMask, QueryTriggerInteraction.Ignore);
             else RaycastMesh.RaycastAll(mouseRay, out hitArray, out colliders, nearbyObjects, maxDistance);
             validHit = false;
             var minDistance = float.MaxValue;
@@ -1284,9 +1285,9 @@ namespace PluginMaster
 
                 }
             }
-            periPoints.Add(periPoints[0]);
             if (periPoints.Count > 0)
             {
+                periPoints.Add(periPoints[0]);
                 Handles.color = new Color(0f, 0f, 0f, 0.7f);
                 Handles.DrawAAPolyLine(8, periPoints.ToArray());
 
@@ -1355,7 +1356,7 @@ namespace PluginMaster
                 repaint = true;
                 AsyncRepaint();
             }
-            if (Event.current.keyCode == KeyCode.S && Event.current.shift)
+            if (Event.current.keyCode == KeyCode.Alpha1 && Event.current.shift)
             {
                 if (Event.current.type == EventType.KeyDown) PaletteManager.pickingBrushes = true;
                 else if (Event.current.type == EventType.KeyUp) PaletteManager.pickingBrushes = false;

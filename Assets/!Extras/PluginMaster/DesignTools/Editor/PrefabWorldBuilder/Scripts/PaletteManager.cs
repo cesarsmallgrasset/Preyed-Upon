@@ -274,6 +274,7 @@ namespace PluginMaster
     {
         [SerializeField] private bool _overwriteSettings = false;
         [SerializeField] private string _guid = string.Empty;
+        [SerializeField] private string _prefabPath = string.Empty;
         [SerializeField] private int _frequency = 1;
         [SerializeField] private long _parentId = -1;
         [SerializeField] private bool _overwriteThumbnailSettings = false;
@@ -301,7 +302,8 @@ namespace PluginMaster
             _parentId = parentSettings.id;
             _parentSettings = parentSettings;
             AssetDatabase.TryGetGUIDAndLocalFileIdentifier(_prefab, out _guid, out long localId);
-            if (prefab == null) return;
+            if (_prefab == null) return;
+            _prefabPath = AssetDatabase.GetAssetPath(_prefab);
             _bottomVertices = BoundsUtils.GetBottomVertices(prefab.transform);
             _height = BoundsUtils.GetBoundsRecursive(prefab.transform, prefab.transform.rotation).size.y;
             _size = BoundsUtils.GetBoundsRecursive(prefab.transform).size;
@@ -358,16 +360,20 @@ namespace PluginMaster
                 if (parentSettings != null) parentSettings.UpdateTotalFrequency();
             }
         }
-
         public GameObject prefab
         {
             get
             {
                 if (_prefab == null)
                     _prefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(_guid));
+                if (_prefab == null)
+                {
+                    _prefab = AssetDatabase.LoadAssetAtPath<GameObject>(_prefabPath);
+                    if (_prefab != null) AssetDatabase.TryGetGUIDAndLocalFileIdentifier(_prefab, out _guid, out long localId);
+                }
+                else  _prefabPath = AssetDatabase.GetAssetPath(_prefab);
                 if (_prefab == null && _parentSettings != null)
                 {
-                    _parentSettings.RemoveItem(this);
                     if (PaletteManager.selectedBrush != null && PaletteManager.selectedBrush.id == _parentSettings.id)
                         PaletteManager.ClearSelection();
                 }
@@ -676,6 +682,16 @@ namespace PluginMaster
 
         public int itemCount => _items.Count;
 
+        public int notNullItemCount => _items.Where(i => i.prefab != null).Count();
+        public bool containMissingPrefabs
+        {
+            get
+            {
+                foreach (var item in _items)
+                    if (item.prefab == null) return true;
+                return false;
+            }
+        }
         public void UpdateTotalFrequency()
         {
             _totalFrequency = 0;

@@ -283,9 +283,7 @@ namespace PluginMaster
                     ? item.prefab : PrefabUtility.GetCorrespondingObjectFromSource(item.prefab));
                 obj.transform.SetPositionAndRotation(item.position, item.rotation);
                 obj.transform.localScale = item.scale;
-                var root = PrefabUtility.GetOutermostPrefabInstanceRoot(obj);
-                if (root != null) root.transform.SetParent(item.parent, true);
-                else obj.transform.SetParent(item.parent, true);
+                var root = PrefabUtility.GetOutermostPrefabInstanceRoot(obj);                
                 PWBCore.AddTempCollider(obj);
                 AddPaintedObject(obj);
                 BrushstrokeManager.UpdateBrushstroke();
@@ -294,6 +292,8 @@ namespace PluginMaster
                     foreach (var tempCollider in tempColliders) Undo.DestroyObjectImmediate(tempCollider);
                 Undo.DestroyObjectImmediate(target);
                 Undo.RegisterCreatedObjectUndo(obj, COMMAND_NAME);
+                if (root != null) Undo.SetTransformParent(root.transform, item.parent, COMMAND_NAME);
+                else Undo.SetTransformParent(obj.transform, item.parent, COMMAND_NAME);
             }
             _paintStroke.Clear();
             _toReplace.Clear();

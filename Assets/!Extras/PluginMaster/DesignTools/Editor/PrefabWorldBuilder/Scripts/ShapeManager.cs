@@ -639,6 +639,11 @@ namespace PluginMaster
                 var parent = _selectedPersistentShapeData.GetParent();
                 if (parent != null) Selection.activeGameObject = parent;
             }
+            if (Event.current.type == EventType.KeyDown && Event.current.alt && Event.current.keyCode == KeyCode.Delete)
+            {
+                ToolProperties.RegisterUndo("Delete Shape");
+                ShapeManager.instance.DeletePersistentItem(_selectedPersistentShapeData.id);
+            }
         }
 
         private static void PreviewPersistenShape(ShapeData shapeData)

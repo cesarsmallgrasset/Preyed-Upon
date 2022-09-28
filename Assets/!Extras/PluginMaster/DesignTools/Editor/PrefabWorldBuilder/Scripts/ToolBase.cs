@@ -52,7 +52,7 @@ namespace PluginMaster
         private static TOOL_SETTINGS _staticUnsavedProfile = new TOOL_SETTINGS();
         [SerializeField] private TOOL_SETTINGS _unsavedProfile = _staticUnsavedProfile;
 
-        protected ToolManagerBase() {}
+        protected ToolManagerBase() { }
         public static ToolManagerBase<TOOL_SETTINGS> instance
         {
             get
@@ -156,10 +156,7 @@ namespace PluginMaster
     {
         private static List<SCENE_DATA> _staticSceneItems = null;
         [SerializeField] private List<SCENE_DATA> _sceneItems = _staticSceneItems;
-        protected PersistentToolManagerBase()
-        {
-            //_instance = this;
-        }
+        protected PersistentToolManagerBase() { }
         public new static PersistentToolManagerBase<TOOL_NAME, TOOL_SETTINGS, CONTROL_POINT, TOOL_DATA, SCENE_DATA> instance
         {
             get
@@ -219,6 +216,11 @@ namespace PluginMaster
             PWBCore.staticData.Save();
         }
 
+        public void DeletePersistentItem(long itemId)
+        {
+            foreach (var item in _staticSceneItems) item.DeleteItemData(itemId);
+            PWBCore.staticData.Save();
+        }
         public TOOL_DATA GetItem(long itemId)
         {
             var items = GetPersistentItems();
@@ -1101,6 +1103,12 @@ namespace PluginMaster
             }
         }
 
+        public void Delete()
+        {
+            var objList = objectList;
+            foreach (var obj in objectList) Undo.DestroyObjectImmediate(obj);
+        }
+
         public virtual void ResetPoses(PersistentData<TOOL_NAME, TOOL_SETTINGS, CONTROL_POINT> initialData)
         {
             var initialPoses = initialData.objectPoses;
@@ -1379,10 +1387,15 @@ namespace PluginMaster
             foreach (var objPos in other._objectPoses) _objectPoses.Add(objPos.Clone());
             _initialBrushId = other._initialBrushId;
         }
+
+        private bool _deserializing = false;
+        protected bool deserializing { get => _deserializing; set => _deserializing = value; }
         public void OnBeforeSerialize() { }
         public void OnAfterDeserialize()
         {
+            deserializing = true;
             UpdatePoints();
+            deserializing = false;
             PWBIO.repaint = true;
         }
         #endregion
@@ -1410,9 +1423,16 @@ namespace PluginMaster
             _items.Add(data);
         }
 
-        public void RemoveItemData(long itemId) => _items.RemoveAll(l => l.id == itemId);
+        public void RemoveItemData(long itemId) => _items.RemoveAll(i => i.id == itemId);
 
-        public TOOL_DATA GetLine(long itemId) => _items.Find(l => l.id == itemId);
+        public void DeleteItemData(long itemId)
+        {
+            var item = GetItem(itemId);
+            if (item == null) return;
+            item.Delete();
+            RemoveItemData(itemId);
+        }
+        public TOOL_DATA GetItem(long itemId) => _items.Find(i => i.id == itemId);
     }
     #endregion
 }
