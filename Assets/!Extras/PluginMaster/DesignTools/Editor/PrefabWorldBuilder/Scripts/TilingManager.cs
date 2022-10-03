@@ -37,14 +37,24 @@ namespace PluginMaster
         [SerializeField] private Quaternion _rotation = Quaternion.identity;
         [SerializeField] private Vector2 _spacing = Vector2.zero;
         [SerializeField] private AxesUtils.SignedAxis _axisAlignedWithNormal = AxesUtils.SignedAxis.UP;
+        public Action<float, Vector3> OnRotationChanged;
         public Quaternion rotation
         {
             get => _rotation;
             set
             {
                 if (_rotation == value) return;
+                var prevRotation = _rotation;
                 _rotation = value;
                 OnDataChanged();
+                if (OnRotationChanged != null)
+                {
+                    var angle = Quaternion.Angle(prevRotation, _rotation);
+                    var axis = Vector3.Cross(prevRotation * Vector3.forward,_rotation * Vector3.forward);
+                    if (axis == Vector3.zero) axis = Vector3.Cross(prevRotation * Vector3.up, _rotation * Vector3.up);
+                    axis.Normalize();
+                    OnRotationChanged(angle, axis);
+                }
             }
         }
         public CellSizeType cellSizeType
@@ -254,6 +264,12 @@ namespace PluginMaster
         private static TilingData _selectedPersistentTilingData = null;
         private static bool _editingPersistentTiling = true;
 
+        private static void TilingInitializeOnLoad()
+        {
+            TilingManager.settings.OnDataChanged += OnTilingSettingsChanged;
+            TilingManager.settings.OnRotationChanged += OnTilingRotationChanged;
+        }
+
         public static void ResetTilingState(bool askIfWantToSave = true)
         {
             if (askIfWantToSave)
@@ -297,6 +313,23 @@ namespace PluginMaster
             ResetSelectedPersistentObject(TilingManager.instance, ref _editingPersistentTiling, _initialPersistentTilingData);
         }
 
+        private static void OnTilingSettingsChanged()
+        {
+            if (!ToolManager.editMode) return;
+            if (_selectedPersistentTilingData == null) return;
+            _selectedPersistentTilingData.settings.Copy(TilingManager.settings);
+            PreviewPersistentTiling(_selectedPersistentTilingData);
+        }
+
+        private static void OnTilingRotationChanged(float angle, Vector3 axis)
+        {
+            if (!ToolManager.editMode) return;
+            if (_selectedPersistentTilingData == null) return;
+            RotateTiling(_selectedPersistentTilingData, angle, axis, false);
+            DrawCells(_selectedPersistentTilingData);
+            PreviewPersistentTiling(_selectedPersistentTilingData);
+            repaint = true;
+        }
         private static void TilingDuringSceneGUI(SceneView sceneView)
         {
             if (sceneView.in2DMode && _tilingData.state != ToolManager.ToolState.NONE)
@@ -347,7 +380,6 @@ namespace PluginMaster
                 DrawTilingRectangle(itemData);
 
                 var selectedTilingId = _initialPersistentTilingData == null ? -1 : _initialPersistentTilingData.id;
-
                 if (DrawTilingControlPoints(itemData, out bool clickOnPoint, out bool wasEdited, out Vector3 delta))
                 {
                     if (clickOnPoint)
@@ -371,6 +403,7 @@ namespace PluginMaster
                     {
                         _editingPersistentTiling = true;
                         selectedItemWasEdited = true;
+                        TilingManager.settings.Copy(_selectedPersistentTilingData.settings);
                     }
                 }
             }
@@ -393,6 +426,17 @@ namespace PluginMaster
                 ApplySelectedPersistentTiling(true);
                 ToolProperties.SetProfile(new ToolProperties.ProfileData(TilingManager.instance, _createProfileName));
                 ToolProperties.RepainWindow();
+            }
+            if (Event.current.type == EventType.KeyDown && Event.current.alt && Event.current.keyCode == KeyCode.Delete)
+            {
+                ToolProperties.RegisterUndo("Delete Tiling");
+                TilingManager.instance.DeletePersistentItem(_selectedPersistentTilingData.id);
+            }
+            if (TilingShortcuts(_selectedPersistentTilingData))
+            {
+                DrawCells(_selectedPersistentTilingData);
+                PreviewPersistentTiling(_selectedPersistentTilingData);
+                repaint = true;
             }
         }
 
@@ -711,8 +755,9 @@ namespace PluginMaster
             TilingManager.instance.AddPersistentItem(sceneGUID, persistentData);
         }
 
-        private static void TilingShortcuts(TilingData data)
+        private static bool TilingShortcuts(TilingData data)
         {
+            if (data == null) return false;
             if (Event.current.button == 1
                 && Event.current.type == EventType.MouseDrag && Event.current.shift)
             {
@@ -729,19 +774,45 @@ namespace PluginMaster
                     AxesUtils.GetAxisValue(spacing, otherAxes[1]));
                 ToolProperties.RepainWindow();
                 Event.current.Use();
+                return true;
             }
-            else if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
-               && Event.current.keyCode == KeyCode.UpArrow) RotateTiling(data, 90, Vector3.right, true);
-            else if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
-                && Event.current.keyCode == KeyCode.DownArrow) RotateTiling(data, 90, Vector3.left, true);
-            else if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
-                && Event.current.keyCode == KeyCode.RightArrow) RotateTiling(data, 90, Vector3.up, true);
-            else if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
-               && Event.current.keyCode == KeyCode.LeftArrow) RotateTiling(data, 90, Vector3.down, true);
-            else if (Event.current.type == EventType.KeyDown && Event.current.control && Event.current.shift
-                && Event.current.keyCode == KeyCode.UpArrow) RotateTiling(data, 90, Vector3.forward, true);
-            else if (Event.current.type == EventType.KeyDown && Event.current.control && Event.current.shift
-                && Event.current.keyCode == KeyCode.DownArrow) RotateTiling(data, 90, Vector3.back, true);
+            if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
+               && Event.current.keyCode == KeyCode.UpArrow)
+            {
+                RotateTiling(data, 90, Vector3.right, true);
+                return true;
+            }
+            if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
+                && Event.current.keyCode == KeyCode.DownArrow)
+            {
+                RotateTiling(data, 90, Vector3.left, true);
+                return true;
+            }
+            if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
+                && Event.current.keyCode == KeyCode.RightArrow)
+            {
+                RotateTiling(data, 90, Vector3.up, true);
+                return true;
+            }
+            if (Event.current.type == EventType.KeyDown && Event.current.control && !Event.current.shift
+               && Event.current.keyCode == KeyCode.LeftArrow)
+            {
+                RotateTiling(data, 90, Vector3.down, true);
+                return true;
+            }
+            if (Event.current.type == EventType.KeyDown && Event.current.control && Event.current.shift
+                && Event.current.keyCode == KeyCode.UpArrow)
+            {
+                RotateTiling(data, 90, Vector3.forward, true);
+                return true;
+            }
+            if (Event.current.type == EventType.KeyDown && Event.current.control && Event.current.shift
+                && Event.current.keyCode == KeyCode.DownArrow)
+            {
+                RotateTiling(data, 90, Vector3.back, true);
+                return true;
+            }
+            return false;
         }
 
         private static void TilingStateEdit(Camera camera)

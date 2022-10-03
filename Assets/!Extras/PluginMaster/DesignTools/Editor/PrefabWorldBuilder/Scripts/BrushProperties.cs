@@ -1176,6 +1176,7 @@ namespace PluginMaster
         {
             var style = new GUIStyle(_itemStyle);
             var selection = _selection.ToArray();
+            if (PaletteManager.selectedBrush == null) return;
             var settingsArray = PaletteManager.selectedBrush.items;
 
             for (int i = 0; i < selection.Length; ++i)

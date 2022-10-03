@@ -196,6 +196,7 @@ namespace PluginMaster
         private float _lenght = 0f;
         private List<Vector3> _midpoints = new List<Vector3>();
         private List<Vector3> _pathPoints = new List<Vector3>();
+        private List<Vector3> _onSurfacePathPoints = new List<Vector3>();
         public override ToolManager.ToolState state
         {
             get => base.state;
@@ -276,7 +277,9 @@ namespace PluginMaster
         {
             base.Initialize();
             for (int i = 0; i < 4; ++i) _controlPoints.Add(new LinePoint(Vector3.zero));
+            deserializing = true;
             UpdatePoints();
+            deserializing = false;
         }
         public LineData() : base() { }
         public LineData(GameObject[] objects, long initialBrushId, LineData lineData)
@@ -394,6 +397,7 @@ namespace PluginMaster
             _lenght = 0;
             _pathPoints.Clear();
             _midpoints.Clear();
+            _onSurfacePathPoints.Clear();
             var segments = GetSegments();
             foreach (var segment in segments)
             {
@@ -404,8 +408,23 @@ namespace PluginMaster
                 if (segmentPoints.Count == 0) continue;
                 _midpoints.AddRange(GetLineMidpoints(segmentPoints.ToArray()));
             }
-            for (int i = 1; i < _pathPoints.Count; ++i)
+
+            for (int i = 0; i < _pathPoints.Count; ++i)
+            {
+                float distance = 10000f;
+                if (ToolManager.tool == ToolManager.PaintTool.LINE && !deserializing)
+                {
+                    var ray = new Ray(_pathPoints[i] - settings.projectionDirection * distance, settings.projectionDirection);
+                    var onSurfacePoint = _pathPoints[i];
+                    if (PWBIO.MouseRaycast(ray, out RaycastHit hit, out GameObject collider, distance * 2, -1, false, true))
+                    {
+                        onSurfacePoint = hit.point;
+                    }
+                    _onSurfacePathPoints.Add(onSurfacePoint);
+                }
+                if (i == 0) continue;
                 _lenght += (_pathPoints[i] - _pathPoints[i - 1]).magnitude;
+            }
         }
 
         public Vector3 NearestPathPoint(Vector3 point, float minPathLenght)
@@ -434,6 +453,7 @@ namespace PluginMaster
         }
         public float lenght => _lenght;
         public Vector3[] pathPoints => _pathPoints.ToArray();
+        public Vector3[] onSurfacePathPoints => _onSurfacePathPoints.ToArray();
         public Vector3 lastPathPoint => _pathPoints.Last();
         public Vector3[] midpoints => _midpoints.ToArray();
         public Vector3 lastTangentPos { get; set; }
@@ -829,9 +849,9 @@ namespace PluginMaster
                     _updateStroke = false;
                     PWBCore.SetSavePending();
                 }
-                if(_brushstroke != null && !BrushstrokeManager.BrushstrokeEqual(BrushstrokeManager.brushstroke, _brushstroke))
+                if (_brushstroke != null && !BrushstrokeManager.BrushstrokeEqual(BrushstrokeManager.brushstroke, _brushstroke))
                     _paintStroke.Clear();
-                
+
                 LineStrokePreview(sceneView.camera, _selectedPersistentLineData, true);
 
             }
@@ -843,6 +863,11 @@ namespace PluginMaster
                 ToolProperties.SetProfile(new ToolProperties.ProfileData(LineManager.instance, _createProfileName));
                 DeleteDisabledObjects();
                 ToolProperties.RepainWindow();
+            }
+            if (Event.current.type == EventType.KeyDown && Event.current.alt && Event.current.keyCode == KeyCode.Delete)
+            {
+                ToolProperties.RegisterUndo("Delete Line");
+                LineManager.instance.DeletePersistentItem(_selectedPersistentLineData.id);
             }
         }
 
@@ -1013,13 +1038,20 @@ namespace PluginMaster
 
         private static void DrawLine(LineData lineData)
         {
-            if (lineData.pathPoints.Length == 0) lineData.UpdatePath(true);
             var pathPoints = lineData.pathPoints;
+            if (pathPoints.Length == 0) lineData.UpdatePath(true);
             Handles.zTest = CompareFunction.Always;
+            var surfacePathPoints = lineData.onSurfacePathPoints;
+            Handles.color = new Color(0f, 0f, 0f, 0.7f);
+            Handles.DrawAAPolyLine(8, surfacePathPoints);
+            Handles.color = new Color(0f, 1f, 1f, 0.5f);
+            Handles.DrawAAPolyLine(4, surfacePathPoints);
+
             Handles.color = new Color(0f, 0f, 0f, 0.7f);
             Handles.DrawAAPolyLine(8, pathPoints);
             Handles.color = new Color(1f, 1f, 1f, 0.7f);
             Handles.DrawAAPolyLine(4, pathPoints);
+
         }
 
         private static void DrawSelectionRectangle()
@@ -1152,7 +1184,7 @@ namespace PluginMaster
 
             if (PreviewIfBrushtrokestaysTheSame(out brushstroke, camera)) return;
 
-            if(!persistent) _paintStroke.Clear();
+            if (!persistent) _paintStroke.Clear();
             for (int i = 0; i < brushstroke.Length; ++i)
             {
                 var strokeItem = brushstroke[i];

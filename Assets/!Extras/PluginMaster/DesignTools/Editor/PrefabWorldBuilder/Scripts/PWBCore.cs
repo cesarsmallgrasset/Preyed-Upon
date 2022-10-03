@@ -133,6 +133,13 @@ namespace PluginMaster
 
             void CreateTempCollider(GameObject target, Mesh mesh)
             {
+                var differentVertices = new List<Vector3>();
+                foreach (var vertex in mesh.vertices)
+                {
+                    if (!differentVertices.Contains(vertex)) differentVertices.Add(vertex);
+                    if (differentVertices.Count >= 3) break;
+                }
+                if (differentVertices.Count < 3) return;
                 if (_tempCollidersTargets.ContainsKey(target.GetInstanceID())) return;
                 var name = target.GetInstanceID().ToString();
                 var tempObj = new GameObject(name);

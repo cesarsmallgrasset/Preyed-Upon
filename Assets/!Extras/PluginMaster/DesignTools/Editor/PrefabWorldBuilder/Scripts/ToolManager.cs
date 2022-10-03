@@ -77,18 +77,17 @@ namespace PluginMaster
                 switch (_tool)
                 {
                     case PaintTool.PIN:
-                        PWBCore.UpdateTempColliders();
+                        if(PinManager.settings.paintOnMeshesWithoutCollider) PWBCore.UpdateTempColliders();
                         PWBIO.ResetPinValues();
                         break;
                     case PaintTool.BRUSH:
-                        PWBCore.UpdateTempColliders();
+                        if (BrushManager.settings.paintOnMeshesWithoutCollider) PWBCore.UpdateTempColliders();
                         break;
                     case PaintTool.GRAVITY:
                         PWBCore.DestroyTempColliders();
                         break;
                     case PaintTool.REPLACER:
                         PWBIO.UpdateOctree();
-                        PWBCore.UpdateTempColliders();
                         PWBIO.ResetReplacer();
                         break;
                     case PaintTool.ERASER:
@@ -100,19 +99,19 @@ namespace PluginMaster
                         PWBIO.ResetExtrudeState(false);
                         break;
                     case PaintTool.LINE:
-                        PWBCore.UpdateTempColliders();
+                        if (LineManager.settings.paintOnMeshesWithoutCollider) PWBCore.UpdateTempColliders();
                         PWBIO.ResetLineState(false);
                         PWBCore.staticData.VersionUpdate();
                         break;
                     case PaintTool.SHAPE:
+                        if (ShapeManager.settings.paintOnMeshesWithoutCollider) PWBCore.UpdateTempColliders();
                         PWBIO.ResetShapeState(false);
                         break;
                     case PaintTool.TILING:
-                        PWBCore.UpdateTempColliders();
+                        if (TilingManager.settings.paintOnMeshesWithoutCollider) PWBCore.UpdateTempColliders();
                         PWBIO.ResetTilingState(false);
                         break;
                     case PaintTool.SELECTION:
-                        PWBCore.UpdateTempColliders();
                         SelectionManager.UpdateSelection();
                         PWBIO.ResetUnityCurrentTool();
                         break;
@@ -123,6 +122,7 @@ namespace PluginMaster
                     case PaintTool.NONE:
                         PWBIO.ResetUnityCurrentTool();
                         PWBIO.ResetReplacer();
+                        PWBCore.DestroyTempColliders();
                         break;
                     default: break;
                 }
