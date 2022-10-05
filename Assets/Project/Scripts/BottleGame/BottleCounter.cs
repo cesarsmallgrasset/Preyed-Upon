@@ -18,5 +18,11 @@ public class BottleCounter : MonoBehaviour
 
     void Counter()
     {
+        while (bottleCount < bottlemanager.BottlesLeft)
+        {
+        
+        }
+       
+
     }
 }

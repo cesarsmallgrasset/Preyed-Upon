@@ -92,7 +92,7 @@
                 {
                     "name": "Shoot",
                     "type": "Button",
-                    "id": "cfa6c4d9-f01d-4e55-bb6a-cb9fc6171e8b",
+                    "id": "42d8a9e4-d5bd-4429-a6a2-a48766e12780",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -212,7 +212,7 @@
                 },
                 {
                     "name": "",
-                    "id": "69b058fa-a1a3-4132-b8a1-37d4e14ca490",
+                    "id": "7c217601-2d5e-4ad6-8dac-8f092d38f395",
                     "path": "<XRController>{LeftHand}/triggerPressed",
                     "interactions": "",
                     "processors": "",
@@ -542,7 +542,7 @@
                 {
                     "name": "Shoot",
                     "type": "Button",
-                    "id": "f8b62715-7e66-48ef-b005-3476293c7c26",
+                    "id": "5607917d-a931-43a9-bd4e-27ef7bc7d332",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -662,7 +662,7 @@
                 },
                 {
                     "name": "",
-                    "id": "d00d999b-7d6a-4ebd-af77-d4bb2867a55c",
+                    "id": "e982d987-6fe8-4fac-b2cb-f5a2be768936",
                     "path": "<XRController>{RightHand}/triggerPressed",
                     "interactions": "",
                     "processors": "",
