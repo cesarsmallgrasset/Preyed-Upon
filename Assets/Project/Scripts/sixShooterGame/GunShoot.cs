@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,28 +18,29 @@ public class GunShoot : MonoBehaviour
     [SerializeField] private int maxDistance;
     [Tooltip("Amount of bullets inside of the cylinder of the gun")]
     [SerializeField] internal int BulletCount = 6;
-    internal int targetsLeft;
+    internal int targetsLeft, bulletsLeft;
     internal RaycastHit hit;
     internal bool Won = false;
     internal GameObject target;
     private void Awake()
     {
+        bulletsLeft = BulletCount;
         targetsLeft = Targets.Count;
         ShootReferenceRight.action.performed += OnShoot;
         ShootReferenceLeft.action.performed += OnShoot;
-        Debug.Log(Targets.Count + " " + targetsLeft);
     }
-
+    private void Update()
+    {
+        Victory();
+    }
     void OnShoot(InputAction.CallbackContext obj)
     {
-        if (BulletCount > 0)
+        if (bulletsLeft > 0)
         {
             //Raycast to see if there is a target ahead of us that can be hit and decreasing the amount of bullets in gun
             Physics.Raycast(Barrel.position, Barrel.forward, out hit, maxDistance);
             CollisionCheck();
-            Victory();
-            BulletCount--;
-
+            bulletsLeft--;
         }
         else
         {
@@ -53,13 +53,12 @@ public class GunShoot : MonoBehaviour
         {
             if (hit.collider.gameObject == Targets[i])
             {
-                target = Targets[i];
-                Debug.Log("Hit: " + target);
-                Destroy(target);
-                targetsLeft--;
-                Debug.Log("Left: " + targetsLeft);
-
-            }
+                    target = Targets[i];
+                    Debug.Log("Hit: " + target);
+                Targets[i].SetActive(false);
+                    targetsLeft--;
+                    Debug.Log("Left: " + targetsLeft);
+                }
         }
     }
     void Victory()
@@ -69,9 +68,18 @@ public class GunShoot : MonoBehaviour
             Debug.Log("Victory");
             Won = true;
         }
-        if (BulletCount <= 0 && targetsLeft > 0 /* insert a way to see if the collided object was a target*/)
+        for (int i = 0; i < Targets.Count; i++)
         {
-            Debug.Log("Loser");
+            if (bulletsLeft <= 0 && targetsLeft > 0 && hit.collider.name != Targets[i].name)
+            {
+                Debug.Log("Loser");
+                bulletsLeft = BulletCount;
+                targetsLeft = Targets.Count;
+                for (int j = 0; j < Targets.Count; j++)
+                {
+                    Targets[j].SetActive(true);
+                }
+            }
         }
     }
 }
