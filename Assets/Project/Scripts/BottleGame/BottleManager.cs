@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BottleManager : MonoBehaviour
 {
-    internal bool Restart = false, Entered = false, Won = false;
-    private int BottlesCollected, BottlesInScene, BallsThrown;
-    [SerializeField] private GameObject[] bottles, balls;
+    internal bool Restart = false, Entered = false, Won = false, completed = false;
+    internal int BottlesCollected, BottlesInScene, BallsThrown;
+    [SerializeField] internal GameObject[] bottles, balls;
     
     private void Start()
     {
@@ -21,10 +21,11 @@ public class BottleManager : MonoBehaviour
         GameRestart();
         Debug.Log(BallsThrown);
     }
+    //checks for ball and bottles entering
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Contains(balls[0].name))
-        {
+        {//ball entered check
             Entered = true;
         }
         if (other.gameObject.name.Contains(bottles[0].name))
@@ -34,7 +35,7 @@ public class BottleManager : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name.Contains(balls[0].name))
+        if (other.gameObject.name.Contains(balls[0].name) && Entered)
         {
             BallsThrown--; 
             Entered = false;
@@ -48,9 +49,12 @@ public class BottleManager : MonoBehaviour
         }
         if (BallsThrown <= 0)
         {
-            Debug.Log("Restarting");
             Restart = true;
+            Debug.Log("Restarting");
+            
+            Restart = false;
         }
+
 
 
     }

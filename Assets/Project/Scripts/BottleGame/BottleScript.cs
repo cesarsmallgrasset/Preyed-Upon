@@ -6,28 +6,42 @@ public class BottleScript : MonoBehaviour
 {
     private BottleManager bottlemanager;
     [SerializeField] GameObject item;
-    private Transform StartPos;
+    private Vector3 StartPos;
+    private Quaternion StartRot;
+    internal bool complete = false;
 
+
+
+    AudioSource audioSource;
     private void Awake()
     {
         bottlemanager = FindObjectOfType<BottleManager>();
-
     }
 
     private void Start()
     {
-        StartPos.SetPositionAndRotation(item.transform.position, item.transform.rotation);
+        StartPos = transform.position;
+        StartRot = transform.rotation;
     }
     private void Update()
     {
         GameRestart();
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        audioSource.Play();
+    }
+
+
     void GameRestart()
     {
         if (bottlemanager.Restart)
         {
-            item.gameObject.transform.SetPositionAndRotation(StartPos.position, StartPos.rotation);
+            this.transform.position = StartPos;
+            this.transform.rotation = StartRot;
             Debug.Log("Bottle Restart");
         }
     }
+
 }
