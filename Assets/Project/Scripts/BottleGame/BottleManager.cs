@@ -4,81 +4,54 @@ using UnityEngine;
 
 public class BottleManager : MonoBehaviour
 {
-   
-    [Header("Item")]
-    [SerializeField] private List<GameObject> Bottles = new List<GameObject>();
-
-    [Tooltip("Insert the name of the GameObject you are using, make sure it is spelled properly and with punctuations")]
-    private string bottleName, ballName;
-    internal int BottlesLeft = 1, ballsLeft = 1;
-    internal Transform BottleLocat;
-    [SerializeField] private GameObject BottleGroup;
-
-
-    [Header ("Balls")]
-    [Tooltip("Add all of the throwables into this list here")]
-    [SerializeField] private List<GameObject> Balls = new List<GameObject>();
-    [Tooltip("Reference to the pack of throwable items")]
-    [SerializeField] private GameObject Throwables;
-    internal Transform throwLocat;
-    private bool ballEntered = false;
-    private int numberCollected = 0;
-    internal bool Won = false;
-
-    //-----------------------------------------------------------------------------------------------------
-
+    internal bool Restart = false, Entered = false, Won = false;
+    private int BottlesCollected, BottlesInScene, BallsThrown;
+    [SerializeField] private GameObject[] bottles, balls;
+    
     private void Start()
     {
-        bottleName = Bottles[0].name;
-        ballName = Balls[0].name;
-        throwLocat = Throwables.transform;
-        BottleLocat = BottleGroup.transform;
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.name.Contains(bottleName) )
-        {
-            numberCollected++;
-            Debug.Log("Collected " + numberCollected);
-        }
-        if (other.gameObject.name.Contains(ballName))
-        {
-            ballEntered = true;
-        }
-    }
-    private void OnTriggerExit(Collider _other)
-    {
-
+        bottles = GameObject.FindGameObjectsWithTag("Bottle");
+        balls = GameObject.FindGameObjectsWithTag("Baseball");
+        BottlesInScene = bottles.Length;
+        BallsThrown = balls.Length;
         
-        if (_other.gameObject.name.Contains(ballName))
-        {
-            if (ballEntered)
-            {
-                ballsLeft--;
-                Debug.Log("Number of balls left: " + ballsLeft);
-                ballEntered = false;
-
-            }    
-
-        }
     }
     private void Update()
     {
-        if (numberCollected == BottlesLeft)
+        GameRestart();
+        Debug.Log(BallsThrown);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name.Contains(balls[0].name))
+        {
+            Entered = true;
+        }
+        if (other.gameObject.name.Contains(bottles[0].name))
+        {
+            BottlesCollected++;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name.Contains(balls[0].name))
+        {
+            BallsThrown--; 
+            Entered = false;
+        }
+    }
+    void GameRestart()
+    {
+        if (BottlesCollected == BottlesInScene)
         {
             Won = true;
-            Debug.Log("You've reached the number of items in the scene");
+        }
+        if (BallsThrown <= 0)
+        {
+            Debug.Log("Restarting");
+            Restart = true;
         }
 
-        ballsLeft = 0;
 
-        if (ballsLeft == 0)
-        { 
-            //Destroy all existing items and respawn in new ones
-            Destroy(Throwables);
-            Destroy(BottleGroup);
-            Instantiate(Throwables, throwLocat.position, throwLocat.rotation);
-            Instantiate(BottleGroup, BottleLocat.position, BottleLocat.rotation);
-        }
     }
 }
