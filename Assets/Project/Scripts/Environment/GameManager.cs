@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]private BottleManager bottleManager;
     [SerializeField]private WaterGunHit watergunManager;
-    [SerializeField]private GunShoot gunshoot;
+    [SerializeField]private ShooterManager shooterManager;
     [SerializeField] private DartGameManager DartManager;
     [SerializeField] private GameObject Player;
     internal bool canEscape = false;
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(watergunManager.Won && gunshoot.Won && bottleManager.Won && DartManager.Won)
+        if(watergunManager.Won && shooterManager.Won && bottleManager.Won && DartManager.Won)
         {
             canEscape = true;
         }

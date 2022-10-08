@@ -7,6 +7,7 @@ TagManager:
   - Balloon
   - Bottle
   - Baseball
+  - Target
   layers:
   - Default
   - TransparentFX

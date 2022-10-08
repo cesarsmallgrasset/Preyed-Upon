@@ -11,6 +11,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: CanEscape
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: AnimStop
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1730862639444582734}
   m_Solo: 0

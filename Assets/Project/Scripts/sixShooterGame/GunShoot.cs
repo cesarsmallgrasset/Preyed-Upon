@@ -4,92 +4,50 @@ using UnityEngine.InputSystem;
 
 public class GunShoot : MonoBehaviour
 {
-    [Header("Action Map References")]
-    [Tooltip("Input maps for controllers go here")]
     [SerializeField] private InputActionReference ShootReferenceRight;
     [SerializeField] private InputActionReference ShootReferenceLeft;
-    [SerializeField] List<GameObject> Targets = new List<GameObject>();
-
-
-    [Header("Shoot references")]
-    [Tooltip("Barrel reference for where the ray will shoot out from")]
-    [SerializeField] private Transform Barrel;
-    [Tooltip("Distance that the ray will shoot out from")]
-    [SerializeField] private int maxDistance;
-    [Tooltip("Amount of bullets inside of the cylinder of the gun")]
-    [SerializeField] internal int BulletCount = 6;
-    [SerializeField] private AudioSource shootSoundFull, shootSoundEmpty;
-
-    internal int targetsLeft, bulletsLeft;
+    [SerializeField] internal int maxDistance;
+    [SerializeField] private GameObject barrel;
+    private ShooterManager manager;
+    
+    //Misc
+    private int bulletCount;
     internal RaycastHit hit;
-    internal bool Won = false;
-    internal GameObject target;
+
+
+    //audio
+    [SerializeField] private AudioClip shot, empty;
+    AudioSource shoot;
+
+
+
+
     private void Awake()
     {
-        bulletsLeft = BulletCount;
-        targetsLeft = Targets.Count;
-        ShootReferenceRight.action.performed += OnShoot;
+        manager = GameObject.FindObjectOfType<ShooterManager>();
+        shoot = GetComponent<AudioSource>();
         ShootReferenceLeft.action.performed += OnShoot;
+        ShootReferenceRight.action.performed += OnShoot;
+
     }
-    private void Update()
+    private void Start()
     {
-        Victory();
+        bulletCount = manager.Targets.Length;
     }
-    void OnShoot(InputAction.CallbackContext obj)
+
+    void OnShoot (InputAction.CallbackContext obj)
     {
-        if (bulletsLeft > 0)
+        if(bulletCount > 0)
         {
-            //Raycast to see if there is a target ahead of us that can be hit and decreasing the amount of bullets in gun
-            Physics.Raycast(Barrel.position, Barrel.forward, out hit, maxDistance);
-            CollisionCheck();
-            if (!shootSoundFull.isPlaying)
-            {
-                shootSoundFull.Play();
-            }
-            bulletsLeft--;
+            shoot.PlayOneShot(shot);
+            Physics.Raycast(barrel.transform.position, barrel.transform.forward, out hit, maxDistance);
+            Debug.Log(hit.collider.name);
         }
         else
         {
-            if (!shootSoundEmpty.isPlaying)
-            {
-                shootSoundEmpty.Play();
-            }
-            Debug.Log("Out of bullets");
+            shoot.PlayOneShot(empty);
         }
     }
-    void CollisionCheck()
-    {
-        for (int i = 0; i < Targets.Count; i++)
-        {
-            if (hit.collider.gameObject == Targets[i])
-            {
-                    target = Targets[i];
-                    Debug.Log("Hit: " + target);
-                Targets[i].SetActive(false);
-                    targetsLeft--;
-                    Debug.Log("Left: " + targetsLeft);
-                }
-        }
-    }
-    void Victory()
-    {
-        if (targetsLeft == 0)
-        {
-            Debug.Log("Victory");
-            Won = true;
-        }
-        for (int i = 0; i < Targets.Count; i++)
-        {
-            if (bulletsLeft <= 0 && targetsLeft > 0 && hit.collider.name != Targets[i].name)
-            {
-                Debug.Log("Loser");
-                bulletsLeft = BulletCount;
-                targetsLeft = Targets.Count;
-                for (int j = 0; j < Targets.Count; j++)
-                {
-                    Targets[j].SetActive(true);
-                }
-            }
-        }
-    }
+
+
 }

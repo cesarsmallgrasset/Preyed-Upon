@@ -21,7 +21,7 @@ public class Balloon : MonoBehaviour
         {
             dartGameManager.balloonsRemaining--;
             //insert animation
-            if (!popSound.isPlaying) {popSound.Play();}
+            popSound.Play();
             gameObject.SetActive(false);
 
             Debug.Log("Balloons remaining: " + dartGameManager.balloonsRemaining);
