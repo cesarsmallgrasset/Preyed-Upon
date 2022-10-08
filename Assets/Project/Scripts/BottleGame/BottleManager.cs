@@ -19,7 +19,7 @@ public class BottleManager : MonoBehaviour
     private void Update()
     {
         GameRestart();
-        Debug.Log(BallsThrown);
+        //Debug.Log(BallsThrown);
     }
     //checks for ball and bottles entering
     private void OnTriggerEnter(Collider other)

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
 public class DartGameManager : MonoBehaviour
 {
 
@@ -13,19 +16,19 @@ public class DartGameManager : MonoBehaviour
     [SerializeField] private GameObject DartReference;
     internal int balloonsRemaining, dartsRemaining;
     internal bool Victory = false, setActive = false, Won = false, dartThrown = false;
-
-
     private void Awake()
     {
         balloonsRemaining = nbBalloons;
         dartsRemaining = nbDarts;
+        
+
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Contains(DartReference.name))
         {
             dartThrown = true;
-
+            
         }
     }
     void OnTriggerExit(Collider other)
@@ -38,6 +41,7 @@ public class DartGameManager : MonoBehaviour
                 Debug.Log("Lost a dart, darts remaining: " + dartsRemaining);
                 Debug.Log("Balloons remaining: " + balloonsRemaining);
                 dartThrown = false;
+                
             }
         }
     }

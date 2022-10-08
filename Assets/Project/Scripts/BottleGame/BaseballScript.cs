@@ -18,7 +18,7 @@ public class BaseballScript : MonoBehaviour
     {
         StartPos = transform.position;
         StartRot = transform.rotation;
-        Debug.Log(StartPos);
+        //Debug.Log(StartPos);
     }
     private void Update()
     {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WaterGunHit : MonoBehaviour
@@ -26,8 +24,15 @@ public class WaterGunHit : MonoBehaviour
     [SerializeField] private float zValue = 0.0005f;
     [Tooltip("Indicates a number at which the item will pop (delete)")]
     [SerializeField] internal float MaxPressure = 1000f;
-    
-    
+
+
+    AudioSource audio1;
+    AudioSource audio2;
+
+    AudioClip audio3;
+
+
+
     internal float nbOfParticles = 0;
     private float x,y,z;
     private Vector3 itemSize;
@@ -55,10 +60,10 @@ public class WaterGunHit : MonoBehaviour
 
             nbOfParticles++;
 
-            Debug.Log("hit");
+            //Debug.Log("hit");
             if (nbOfParticles == MaxPressure)
             {
-                Debug.Log("Finished!");
+                //Debug.Log("Finished!");
                 Destroy(item);
                 if (!victorySound.isPlaying)
                 {

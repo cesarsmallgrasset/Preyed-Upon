@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class WGBalloonPop : MonoBehaviour
 {
-    [SerializeField] WaterGunHit wgHit;
-    [SerializeField] AudioSource popSound;
+    WaterGunHit wgHit;
+    internal AudioSource popSound;
+    [SerializeField] AudioClip popClip;
 
     private void Awake()
     {
@@ -16,7 +17,7 @@ public class WGBalloonPop : MonoBehaviour
     {
         if(wgHit.nbOfParticles == wgHit.MaxPressure)
         {
-            if (!popSound.isPlaying) { popSound.Play(); }
+          popSound.PlayOneShot(popClip); 
         }
 
     }

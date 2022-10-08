@@ -18,6 +18,7 @@ public class BottleScript : MonoBehaviour
     private void Awake()
     {
         bottlemanager = FindObjectOfType<BottleManager>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -32,9 +33,12 @@ public class BottleScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!audioSource.isPlaying)
+        if (collision.gameObject.name != "SM_Prop_Crate")
         {
-            audioSource.Play();
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
         }
     }
 

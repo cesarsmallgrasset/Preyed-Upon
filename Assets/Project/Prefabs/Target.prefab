@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8588597243249831991}
   - component: {fileID: 7533964367654207466}
   - component: {fileID: 8900863842024414070}
+  - component: {fileID: 2648524238704953288}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402001211151495312}
-  m_LocalRotation: {x: -0.0014522618, y: -0.2074412, z: 0.006848377, w: 0.9782225}
+  m_LocalRotation: {x: 0, y: 0, z: -0.028793924, w: 0.9995854}
   m_LocalPosition: {x: 3.812, y: -2.063, z: 0.617}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -33,7 +34,7 @@ Transform:
   - {fileID: 1864165211022375058}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -23.945, z: 0.802}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -3.3}
 --- !u!82 &7533964367654207466
 AudioSource:
   m_ObjectHideFlags: 0
@@ -144,6 +145,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitSound: {fileID: 7533964367654207466}
   gunshoot: {fileID: 0}
+--- !u!95 &2648524238704953288
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402001211151495312}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8f9baf1d96d6b154f80e54c9aaff0d8c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &1860190395502607764
 PrefabInstance:
   m_ObjectHideFlags: 0
