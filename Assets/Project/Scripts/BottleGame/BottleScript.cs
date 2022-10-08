@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class BottleScript : MonoBehaviour
 {
     private BottleManager bottlemanager;
@@ -30,7 +32,10 @@ public class BottleScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        audioSource.Play();
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
     }
 
 

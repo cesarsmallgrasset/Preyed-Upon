@@ -18,6 +18,8 @@ public class GunShoot : MonoBehaviour
     [SerializeField] private int maxDistance;
     [Tooltip("Amount of bullets inside of the cylinder of the gun")]
     [SerializeField] internal int BulletCount = 6;
+    [SerializeField] private AudioSource shootSoundFull, shootSoundEmpty;
+
     internal int targetsLeft, bulletsLeft;
     internal RaycastHit hit;
     internal bool Won = false;
@@ -40,10 +42,18 @@ public class GunShoot : MonoBehaviour
             //Raycast to see if there is a target ahead of us that can be hit and decreasing the amount of bullets in gun
             Physics.Raycast(Barrel.position, Barrel.forward, out hit, maxDistance);
             CollisionCheck();
+            if (!shootSoundFull.isPlaying)
+            {
+                shootSoundFull.Play();
+            }
             bulletsLeft--;
         }
         else
         {
+            if (!shootSoundEmpty.isPlaying)
+            {
+                shootSoundEmpty.Play();
+            }
             Debug.Log("Out of bullets");
         }
     }

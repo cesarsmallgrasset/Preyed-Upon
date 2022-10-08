@@ -25,10 +25,10 @@ public class WaterGunHit : MonoBehaviour
     [Tooltip("Insert the value that the item's Z axis will inflate by")]
     [SerializeField] private float zValue = 0.0005f;
     [Tooltip("Indicates a number at which the item will pop (delete)")]
-    [SerializeField] private float MaxPressure = 1000f;
+    [SerializeField] internal float MaxPressure = 1000f;
     
     
-    private float nbOfParticles = 0;
+    internal float nbOfParticles = 0;
     private float x,y,z;
     private Vector3 itemSize;
     internal bool Won = false;

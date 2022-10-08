@@ -4,15 +4,24 @@ public class Balloon : MonoBehaviour
 {
 
     [SerializeField] private GameObject dart;
-    [SerializeField] private DartGameManager dartGameManager;
     [SerializeField] private ParticleSystem PopEffect;
+    private DartGameManager dartGameManager;
+    private AudioSource popSound;
+
+    private void Awake()
+    {
+        dartGameManager = GameObject.FindObjectOfType<DartGameManager>();
+        popSound = gameObject.AddComponent<AudioSource>();
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Contains(dart.name))
         {
             dartGameManager.balloonsRemaining--;
-            ///PopEffect.Play();
+            //insert animation
+            if (!popSound.isPlaying) {popSound.Play();}
             gameObject.SetActive(false);
 
             Debug.Log("Balloons remaining: " + dartGameManager.balloonsRemaining);
