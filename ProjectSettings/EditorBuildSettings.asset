@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Project/Scenes/Menu.unity
+    guid: a01e4ed75e9d2a846a83f811d05e91c8
+  - enabled: 1
     path: Assets/Project/Scenes/Preyed Upon.unity
     guid: 884a94a2be6f50a408a5505df489bceb
   m_configObjects:
