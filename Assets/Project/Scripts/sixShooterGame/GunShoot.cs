@@ -11,9 +11,8 @@ public class GunShoot : MonoBehaviour
     private ShooterManager manager;
     
     //Misc
-    private int bulletCount;
+    internal int bulletCount;
     internal RaycastHit hit;
-
 
     //audio
     [SerializeField] private AudioClip shot, empty;
@@ -42,10 +41,15 @@ public class GunShoot : MonoBehaviour
             shoot.PlayOneShot(shot);
             Physics.Raycast(barrel.transform.position, barrel.transform.forward, out hit, maxDistance);
             Debug.Log(hit.collider.name);
+            bulletCount--;
         }
         else
         {
             shoot.PlayOneShot(empty);
+        }
+        if (manager.Restart)
+        {
+            bulletCount = manager.Targets.Length;
         }
     }
 

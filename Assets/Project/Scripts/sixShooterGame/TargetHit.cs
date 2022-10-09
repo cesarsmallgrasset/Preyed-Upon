@@ -10,16 +10,20 @@ public class TargetHit : MonoBehaviour
     private GunShoot gun;
     private ShooterManager manager;
 
-    private Collider targetCol;
+    private MeshCollider targetCol;
     private Animator animator;
     private AudioSource audio;
-    private AudioClip clip;
+
+    internal bool Restart = false;
     private void Awake()
     {
+        audio = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
         gun = GameObject.FindObjectOfType<GunShoot>();
         manager = GameObject.FindObjectOfType<ShooterManager>();
-        targetCol.GetComponentInChildren<MeshCollider>();
-
+        targetCol = GetComponentInChildren(typeof(MeshCollider)) as MeshCollider;
+        Debug.Log(targetCol);
+        audio.clip = manager.audioClip;
     }
 
     private void Update()
@@ -28,22 +32,25 @@ public class TargetHit : MonoBehaviour
     }
     private void hitCheck()
     {
-        if (gun.hit.collider.name == targetCol.name)
-        {
-            //Animation for when collision happens
-            animator.SetBool("isHit", true);
 
-            //Randomizes sound that comes from impact
-            clip = manager.audioClips[Random.Range(0, manager.audioClips.Length)];
-            audio.PlayOneShot(clip);
+            if (gun.hit.collider == targetCol)
+            {
+                {
+                //Animation for when collision happens
+                animator.SetBool("isHit", true);
 
-            //Decreases total target count
-            manager.TargetCount--;
-            Debug.Log(this.gameObject.name);
+                //Sound that comes from impact
+                if(!audio.isPlaying) audio.Play();
+                
+                //Decreases total target count
+                manager.TargetCount--;
+                Debug.Log(this.gameObject.name);
+                }
         }
         if (manager.Restart)
         {
             animator.SetBool("Reset", true);
+            Restart = true;
         }
     }
 }
