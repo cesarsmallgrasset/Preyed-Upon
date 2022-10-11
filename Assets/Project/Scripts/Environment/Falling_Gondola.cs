@@ -8,7 +8,7 @@ public class Falling_Gondola : MonoBehaviour
 {
     private Rigidbody rb;
     private Animator animator;
-    private AudioSource audio;
+    private new AudioSource audio;
     [SerializeField] private AudioClip clip;
     private void Awake()
     {

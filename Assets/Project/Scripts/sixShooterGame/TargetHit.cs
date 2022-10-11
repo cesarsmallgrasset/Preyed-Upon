@@ -12,7 +12,7 @@ public class TargetHit : MonoBehaviour
 
     private MeshCollider targetCol;
     private Animator animator;
-    private AudioSource audio;
+    private new AudioSource audio;
 
     internal bool Restart = false;
     private void Awake()

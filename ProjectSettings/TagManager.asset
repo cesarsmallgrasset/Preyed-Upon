@@ -9,6 +9,7 @@ TagManager:
   - Baseball
   - Target
   - Ground
+  - Dart
   layers:
   - Default
   - TransparentFX
