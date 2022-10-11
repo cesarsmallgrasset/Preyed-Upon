@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class WaterGunHit : MonoBehaviour
 {
+    private WaterGunManager manager;
     [SerializeField] internal GameObject Balloon;
     [SerializeField] internal ParticleSystem water;
     [SerializeField] internal Vector3 IncrementationValues;
@@ -11,17 +12,19 @@ public class WaterGunHit : MonoBehaviour
     
     private void Awake()
     {
+        manager = GameObject.FindObjectOfType<WaterGunManager>();
         itemSize = Balloon.transform.localScale;
     }
 
 
     private void OnParticleCollision(GameObject other)
     {
-        if (other == water)
+        if (other.name == water.name)
         {
             //values being stored
-            Balloon.transform.localScale += IncrementationValues;
+            Balloon.transform.localScale += (IncrementationValues/1000);
             nbOfParticles++;
+
         }
     }
 }

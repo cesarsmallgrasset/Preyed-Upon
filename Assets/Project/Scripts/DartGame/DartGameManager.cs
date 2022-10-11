@@ -106,23 +106,28 @@ public class DartGameManager : MonoBehaviour
     private void Update()
     {
         VictoryCheck();
-        Restart();
+        Debug.Log(balloonsLeft);
+        Debug.Log(dartsLeft);
+
     }
     private void OnTriggerEnter(Collider other)
     {
         for(int i = 0; i < darts.Length; i++)
-        if(other.gameObject == darts[i])
+        if(other.gameObject == darts[i].gameObject)
             {
                 entered = true;
+                Debug.Log("entered");
             }
     }
     private void OnTriggerExit(Collider other)
     {
         for (int i = 0; i < darts.Length; i++)
-            if (other.gameObject == darts[i] && entered)
+            if (other.gameObject == darts[i].gameObject && entered)
             {
                 dartsLeft--;
                 entered = false;
+                Debug.Log("Exited");
+
             }
     }
     void VictoryCheck()
@@ -130,6 +135,7 @@ public class DartGameManager : MonoBehaviour
         if(balloonsLeft <= 0)
         {
             Won = true;
+            Debug.Log("Won");
         }
         else if (balloonsLeft > 0 && dartsLeft <= 0)
         {

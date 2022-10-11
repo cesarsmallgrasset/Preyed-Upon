@@ -15,6 +15,9 @@ public class TargetHit : MonoBehaviour
     private new AudioSource audio;
 
     internal bool Restart = false;
+
+    internal bool notPlaying = true;
+
     private void Awake()
     {
         audio = GetComponent<AudioSource>();
@@ -22,7 +25,6 @@ public class TargetHit : MonoBehaviour
         gun = GameObject.FindObjectOfType<GunShoot>();
         manager = GameObject.FindObjectOfType<ShooterManager>();
         targetCol = GetComponentInChildren(typeof(MeshCollider)) as MeshCollider;
-        Debug.Log(targetCol);
         audio.clip = manager.audioClip;
     }
 
@@ -40,8 +42,12 @@ public class TargetHit : MonoBehaviour
                 animator.SetBool("isHit", true);
 
                 //Sound that comes from impact
-                if(!audio.isPlaying) audio.Play();
-                
+                if (notPlaying)
+                {
+                    audio.Play();
+                    while (audio.isPlaying) notPlaying = false;
+                     
+                }
                 //Decreases total target count
                 manager.TargetCount--;
                 Debug.Log(this.gameObject.name);

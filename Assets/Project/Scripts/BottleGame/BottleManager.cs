@@ -7,6 +7,8 @@ public class BottleManager : MonoBehaviour
     internal bool Restart = false, Entered = false, Won = false, completed = false;
     internal int BottlesCollected, BottlesInScene, BallsThrown;
     [SerializeField] internal GameObject[] bottles, balls;
+
+    [SerializeField] internal new AudioSource audio;
     
     private void Start()
     {
@@ -39,6 +41,7 @@ public class BottleManager : MonoBehaviour
         {
             BallsThrown--; 
             Entered = false;
+            
         }
     }
     void GameRestart()
@@ -46,6 +49,9 @@ public class BottleManager : MonoBehaviour
         if (BottlesCollected == BottlesInScene)
         {
             Won = true;
+            audio.Play();
+            if (audio.isPlaying) return;
+            else audio.Stop();
         }
         if (BallsThrown <= 0)
         {

@@ -32,9 +32,6 @@ public class ShooterManager : MonoBehaviour
     {
         TargetManager();
         if (gun.bulletCount == Targets.Length && targets.Restart) Restart = false; targets.Restart = false;
-        //;
-
-
     }
     void TargetManager()
     {

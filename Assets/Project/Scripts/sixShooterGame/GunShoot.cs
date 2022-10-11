@@ -29,6 +29,7 @@ public class GunShoot : MonoBehaviour
         ShootReferenceRight.action.performed += OnShoot;
 
     }
+
     private void Start()
     {
         bulletCount = manager.Targets.Length;
@@ -49,6 +50,7 @@ public class GunShoot : MonoBehaviour
         }
         if (manager.Restart)
         {
+            Debug.Log("restarting");
             bulletCount = manager.Targets.Length;
         }
     }
