@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     internal GameObject menu;
 
     [SerializeField] private InputActionReference menuButton;
-    internal bool canEscape = false;
+    [SerializeField] internal bool canEscape = false;
 
 
     private bool opened = false;

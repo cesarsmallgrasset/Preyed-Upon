@@ -6,7 +6,7 @@ public class Train : MonoBehaviour
 {
     private Animator animator;
     private GameManager manager;
-    internal new Collider collider;
+    [SerializeField] internal new Collider collider;
 
     private void Awake()
     {
@@ -21,18 +21,10 @@ public class Train : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Finale();
-
-        }
-    }
-
-    void Finale()
-    {
         if (manager.canEscape)
         {
             animator.SetBool("CanEscape", true);
         }
     }
+
 }
