@@ -19,8 +19,6 @@ public class GunShoot : MonoBehaviour
     AudioSource shoot;
 
 
-
-
     private void Awake()
     {
         manager = GameObject.FindObjectOfType<ShooterManager>();

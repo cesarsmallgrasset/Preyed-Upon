@@ -10,12 +10,15 @@ public class Falling_Gondola : MonoBehaviour
     private Animator animator;
     private new AudioSource audio;
     [SerializeField] private AudioClip clip;
+    [SerializeField] private Joint joint; 
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         audio = GetComponent<AudioSource>();
         audio.clip = clip;
+        joint = GetComponent<FixedJoint>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,7 +26,9 @@ public class Falling_Gondola : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             animator.SetBool("IsFalling", true);
+            animator.SetBool("Is_Playing", false);
             rb.useGravity = true;
+            Destroy(joint);
         }
     }
 

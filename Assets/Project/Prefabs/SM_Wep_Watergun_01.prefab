@@ -181,7 +181,6 @@ GameObject:
   - component: {fileID: 8944019172851980165}
   - component: {fileID: 6547195926728566758}
   - component: {fileID: 1246775245915989257}
-  - component: {fileID: 5736320195085591006}
   m_Layer: 0
   m_Name: SM_Wep_Watergun_01
   m_TagString: Untagged
@@ -552,20 +551,6 @@ MonoBehaviour:
   m_ForceGravityOnDetach: 0
   m_RetainTransformParent: 1
   m_AttachPointCompatibilityMode: 0
---- !u!114 &5736320195085591006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2953688333035776444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b39fc527ed159845b1f14f9159aba65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shootReference: {fileID: 7695509053015882017, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  WaterSound: {fileID: 6547195926728566758}
 --- !u!1 &2953970311666997388
 GameObject:
   m_ObjectHideFlags: 0
@@ -4288,7 +4273,7 @@ ParticleSystem:
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.58
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2

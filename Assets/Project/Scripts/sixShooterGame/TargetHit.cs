@@ -14,9 +14,7 @@ public class TargetHit : MonoBehaviour
     private Animator animator;
     private new AudioSource audio;
 
-    internal bool Restart = false;
-
-    internal bool notPlaying = true;
+    internal bool Restart = false, shot = false;
 
     private void Awake()
     {
@@ -32,27 +30,30 @@ public class TargetHit : MonoBehaviour
     {
         hitCheck();
     }
+
     private void hitCheck()
     {
 
-            if (gun.hit.collider == targetCol)
+        if (gun.hit.collider == targetCol)
+        {
+            shot = true;
+            if (shot)
             {
-                {
                 //Animation for when collision happens
                 animator.SetBool("isHit", true);
 
                 //Sound that comes from impact
-                if (notPlaying)
-                {
-                    audio.Play();
-                    while (audio.isPlaying) notPlaying = false;
-                     
-                }
+               // audio.Play();
+
                 //Decreases total target count
                 manager.TargetCount--;
                 Debug.Log(this.gameObject.name);
-                }
+                shot = false;
+            }
         }
+    }
+    void restart()
+    {
         if (manager.Restart)
         {
             animator.SetBool("Reset", true);

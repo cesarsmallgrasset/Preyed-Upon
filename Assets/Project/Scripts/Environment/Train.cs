@@ -7,15 +7,14 @@ public class Train : MonoBehaviour
     private Animator animator;
     private GameManager manager;
     [SerializeField] internal new Collider collider;
+    
+
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         manager = GameObject.FindObjectOfType<GameManager>();
         collider = GetComponentInChildren<BoxCollider>();
-
-
-
 
     }
     
@@ -24,6 +23,7 @@ public class Train : MonoBehaviour
         if (manager.canEscape)
         {
             animator.SetBool("CanEscape", true);
+
         }
     }
 

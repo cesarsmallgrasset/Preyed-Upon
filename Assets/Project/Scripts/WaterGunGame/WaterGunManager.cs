@@ -16,27 +16,27 @@ public class WaterGunManager : MonoBehaviour
     {
         waterGun = GameObject.FindObjectOfType<WaterGunHit>();
     }
-    private void Update()
-    {
-        Check();
-    }
+    //private void Update()
+    //{
+    //    Check();
+    //}
 
-    void Check()
-    {
-        //debug.log("hit");
-        if (waterGun.nbOfParticles == MaxPressure)
-        {
-            //debug.log("finished!");
-            Destroy(waterGun.Balloon);
-            victorysound.Play();
-            Instantiate(ticket, ticketholder);
-            while (victorysound.isPlaying) return;
-            victorysound.Stop();
-            audio.SetActive(true);
+    //void Check()
+    //{
+    //    //debug.log("hit");
+    //    if (waterGun.nbOfParticles == MaxPressure)
+    //    {
+    //        //debug.log("finished!");
+    //        Destroy(waterGun.Balloon);
+    //        victorysound.Play();
+    //        Instantiate(ticket, ticketholder);
+    //        while (victorysound.isPlaying) return;
+    //        victorysound.Stop();
+    //        audio.SetActive(true);
 
-        }
-        Won = true;
+    //    }
+    //    Won = true;
         
-    }
+    //}
 
 }
