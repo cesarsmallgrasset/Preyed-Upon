@@ -39,6 +39,7 @@ public class GunShoot : MonoBehaviour
         {
             shoot.PlayOneShot(shot);
             Physics.Raycast(barrel.transform.position, barrel.transform.forward, out hit, maxDistance);
+            Debug.DrawRay(barrel.transform.position, (barrel.transform.forward * maxDistance), Color.green);
             Debug.Log(hit.collider.name);
             bulletCount--;
         }

@@ -7,13 +7,12 @@ public class WaterGunHit : MonoBehaviour
     [Header("References")]
 
     [Tooltip("Insert the name (or at least a part that is unique) of the particle that will affect this object")]
-    [SerializeField] private ParticleSystem Water;
+    [SerializeField] private ParticleSystem particle;
     [Tooltip("Insert the item you want to be blown up")]
     [SerializeField] private GameObject item;
     [Tooltip("Insert the sound you want")]
-    [SerializeField] private AudioSource victorySound, balloonPop;
-    //[Tooltip("Insert the animation you want")]
-    //reference the animation here
+    [SerializeField] private AudioSource popSound;
+
 
 
     [Header("Variables")]
@@ -21,35 +20,44 @@ public class WaterGunHit : MonoBehaviour
 
     [Tooltip("Indicates a number at which the item will pop (delete)")]
     [SerializeField] private float MaxPressure = 1000f;
-    [SerializeField] private Vector3 Values;
-    internal float nbOfParticles = 0;
-    internal bool Won = false;
+    [SerializeField] private Vector3 pressureValues;
+
+
+    private WaterGunManager manager;
+    internal float builtPressure = 0;
+    internal bool playSound = false;
+
+    private void Awake()
+    {
+        manager = GameObject.FindObjectOfType<WaterGunManager>();
+
+    }
+
+
 
     private void OnParticleCollision(GameObject other)
     {
 
         //Set the values to those of the object then increases the size on every call by the amount chosen in inspector
-        if (other.name.Contains(Water.name))
+        if (other.name.Contains(particle.name))
         {
 
-            item.transform.localScale += (Values/1000);
+            item.transform.localScale += (pressureValues/1000);
 
-            nbOfParticles++;
+            builtPressure++;
 
             Debug.Log("hit");
-            if (nbOfParticles == MaxPressure)
+            if (builtPressure == MaxPressure)
             {
-                Debug.Log("Finished!");
-                Destroy(item);
-                if (!victorySound.isPlaying)
-                {
-                    //insert animation
-                    victorySound.Play();
-                    this.gameObject.SetActive(false);
-                }
-                Won = true;
+                balloonPop();
+                manager.Won = true;
             }
-
         }
+    }
+    void balloonPop()
+    {
+        popSound.Play();
+        item.SetActive(false);
+
     }
 }
