@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4900453660940955301}
   - component: {fileID: 2684068478762910328}
   - component: {fileID: 3198116923681321046}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SM_Baseball_fixed
   m_TagString: Baseball
   m_Icon: {fileID: 0}

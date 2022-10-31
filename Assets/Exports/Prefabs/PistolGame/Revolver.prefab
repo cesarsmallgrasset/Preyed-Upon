@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 707808122764162340}
   - component: {fileID: 718495157982488716}
   - component: {fileID: 4562574088501911229}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: SM_Wep_Revolver_01_Hammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 696616573671773104}
   - component: {fileID: 5302971919240843526}
   - component: {fileID: 7533552279253502070}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Revolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,10 +312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86d96c6f134cd9f44837534b81db3634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftShoot: {fileID: -5201141429076627338, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
-  RightShoot: {fileID: 7695509053015882017, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
+  LeftShoot: {fileID: -5201141429076627338, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  RightShoot: {fileID: 7695509053015882017, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   barrel: {fileID: 469033207818958658}
   maxDistance: 20
   bullets: 6
@@ -469,7 +467,7 @@ GameObject:
   - component: {fileID: 695001900139489216}
   - component: {fileID: 707762534501842720}
   - component: {fileID: 718472240353755410}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: SM_Wep_Revolver_01_Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +550,7 @@ GameObject:
   - component: {fileID: 694832340040160852}
   - component: {fileID: 710754188025892742}
   - component: {fileID: 718353124517870108}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: SM_Wep_Revolver_01_Cylander
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -633,7 +631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 469033207818958658}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

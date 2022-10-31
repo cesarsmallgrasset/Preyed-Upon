@@ -7,12 +7,12 @@ public class GameManager : MonoBehaviour
     private DartManager dart;
     private WGhit water;
     private ShooterManager shooter;
-
+    
     [SerializeField] internal bool spawnKey;
 
 
     //key stuff for HH
-    [SerializeField] private GameObject HHkey;
+    [SerializeField] private GameObject HHkey, mansionText;
     [SerializeField] private Transform HHkeySpawnLoc;
 
     //house key variables
@@ -43,9 +43,8 @@ public class GameManager : MonoBehaviour
 
     void victoryCheck()
     {
-        if (bottle.won && dart.won && water.won && shooter.won)
+        if (bottle.won && dart.won && water.won && shooter.won || spawnKey)
         {
-            
             keySpawn();
         }
     }
@@ -56,6 +55,7 @@ public class GameManager : MonoBehaviour
         { 
             Instantiate(HHkey, HHkeySpawnLoc);
             keySpawned = true;
+            
         }
     }
 

@@ -5,9 +5,11 @@ using UnityEngine;
 public class GardenKey : MonoBehaviour
 {
     private GameManager manager;
+    private AudioSource key;
 
     private void Awake()
     {
+        key = GetComponent<AudioSource>();
         manager = GameObject.FindObjectOfType<GameManager>();
     }
     // Update is called once per frame
@@ -21,6 +23,7 @@ public class GardenKey : MonoBehaviour
         {
             manager.mKeyCollected = true;
             this.gameObject.SetActive(false);
+            key.Play();
         }
     }
 }
