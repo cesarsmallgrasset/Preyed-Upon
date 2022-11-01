@@ -16,7 +16,7 @@ public class DoorScript : MonoBehaviour
     }
     private void Start()
     {
-        rb.mass = 1000;
+        rb.mass = 100000;
     }
 
 
