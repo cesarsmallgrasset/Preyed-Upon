@@ -12,20 +12,24 @@ public class GameManager : MonoBehaviour
 
 
     //key stuff for HH
-    [SerializeField] private GameObject HHkey, mansionText;
+    [SerializeField] private GameObject HHkey, storm, houseText;
     [SerializeField] private Transform HHkeySpawnLoc;
 
     //house key variables
-    internal bool hKeyCollected, keySpawned, houseUnlocked;
+    internal bool hKeyCollected, keySpawned, houseUnlocked, stormSpawn;
+
     
     //maze variables
     internal bool mKeyCollected, gateOpen;
 
     //train variables
     internal bool trainEntered;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        
         bottle = GameObject.FindObjectOfType<BottleManager>();
         dart = GameObject.FindObjectOfType<DartManager>();
         water = GameObject.FindObjectOfType<WGhit>();
@@ -39,23 +43,38 @@ public class GameManager : MonoBehaviour
         HHpickup();
         mazePickup();
         train();
+        
     }
 
     void victoryCheck()
     {
         if (bottle.won && dart.won && water.won && shooter.won || spawnKey)
         {
-            keySpawn();
+            if (!stormSpawn)
+            {
+                keyEvent();
+                stormSpawn = true;
+            }
         }
     }
 
-    void keySpawn()
+    void keyEvent()
+    {
+
+        storm.SetActive(true);
+        houseText.SetActive(true);
+        float Timer = 5;
+        Timer -= Time.deltaTime;
+        if(Timer <= 0) houseText.SetActive(false);
+    }
+
+    internal void keySpawn()
     {
         if (!keySpawned)
-        { 
+        {
+            storm.SetActive(false);
             Instantiate(HHkey, HHkeySpawnLoc);
             keySpawned = true;
-            
         }
     }
 

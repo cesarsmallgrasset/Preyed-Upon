@@ -17,7 +17,7 @@ public class triggerAudio : MonoBehaviour
         {
             audio.Play();
 
-            Invoke("Destroy", 2f);
+            Invoke("Destroy", 5f);
         }
     }
     private void Destroy()

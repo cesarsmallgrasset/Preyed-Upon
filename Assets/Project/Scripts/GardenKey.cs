@@ -6,7 +6,7 @@ public class GardenKey : MonoBehaviour
 {
     private GameManager manager;
     private AudioSource key;
-
+    float timer = 2;
     private void Awake()
     {
         key = GetComponent<AudioSource>();
@@ -15,15 +15,30 @@ public class GardenKey : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-              
+
+        if (key.isPlaying)
+            despawn(timer);
+
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
             manager.mKeyCollected = true;
-            this.gameObject.SetActive(false);
             key.Play();
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    void despawn(float timer)
+    {
+        timer -= Time.deltaTime;
+
+        if (timer <= 0)
+        {
+
         }
     }
 }
+
+    

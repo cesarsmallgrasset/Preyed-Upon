@@ -4,6 +4,7 @@ public class Housekey : MonoBehaviour
 {
     private GameManager gameManager;
     private AudioSource key;
+    float timer = 2f;
     private void Awake()
     {
         key = GetComponent<AudioSource>();
@@ -12,16 +13,35 @@ public class Housekey : MonoBehaviour
     private void Start()
     {
     }
+
+    private void Update()
+    {
+
+        if(key.isPlaying)
+        despawn(timer);
+
+
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
         {
             gameManager.hKeyCollected = true;
-            this.gameObject.SetActive(false);
             key.Play();
+            this.gameObject.SetActive(false);
+
         }
 
 
+    }
+    void despawn(float timer)
+    {
+        timer -= Time.deltaTime;
+        
+        if (timer <= 0)
+        {
+
+        }
     }
 
 }
