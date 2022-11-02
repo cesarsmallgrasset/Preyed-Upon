@@ -42,7 +42,11 @@ public class TargetHit : MonoBehaviour
             targetSet = false;
         }
         //
-        else return;
+        else
+        {
+            manager.hitTarget = false;
+            return;
+        }
     }
     private void reset()
     {

@@ -9,7 +9,7 @@ public class ShooterManager : MonoBehaviour
     [SerializeField] private GameObject[] targets;
     [SerializeField] internal bool won, reset;
     [SerializeField] internal int targetCount;
-    private bool hitTarget = false;
+    internal bool hitTarget = false;
     private void Awake()
     {
         audio = GameObject.FindObjectOfType<ShooterAudio>();
