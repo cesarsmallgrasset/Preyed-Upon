@@ -682,7 +682,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1276423350871364184, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1.35
+      value: 1.05
       objectReference: {fileID: 0}
     - target: {fileID: 1276423350871364184, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}
       propertyPath: CollisionModule.m_Bounce.scalar
@@ -694,7 +694,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1276423350871364184, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
-      value: 18.29
+      value: 22.83
       objectReference: {fileID: 0}
     - target: {fileID: 1276423350871364184, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}
       propertyPath: CollisionModule.collisionMessages
@@ -702,7 +702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1276423350871364184, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 0.84
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1276423350871364184, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}
       propertyPath: VelocityModule.speedModifier.scalar
@@ -798,7 +798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8716839230346051309, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e43a1c676f237f0409754f12e8bd120b, type: 3}

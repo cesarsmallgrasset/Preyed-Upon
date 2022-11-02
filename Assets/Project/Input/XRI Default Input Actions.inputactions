@@ -300,15 +300,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Light Toggle",
-                    "type": "Button",
-                    "id": "320ebfc3-01f9-49f1-840e-a036c92b46d9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Menu",
                     "type": "Button",
                     "id": "8bb08e09-702d-4e41-ba20-e8b590bb3729",
@@ -404,17 +395,6 @@
                     "processors": "ScaleVector2(x=0),StickDeadzone",
                     "groups": "Generic XR Controller",
                     "action": "Translate Anchor",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "334ec01f-0760-4989-ab9a-4d09f4c92882",
-                    "path": "<XRController>{RightHand}/primaryButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Light Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -788,6 +768,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Light Toggle",
+                    "type": "Button",
+                    "id": "9d839149-2cd2-4975-98cd-3b29da6b976f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -876,6 +865,17 @@
                     "processors": "ScaleVector2(x=0),StickDeadzone",
                     "groups": "Generic XR Controller",
                     "action": "Translate Anchor",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "78b601ee-24ab-4476-93ca-f8aa1b52bf26",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Light Toggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

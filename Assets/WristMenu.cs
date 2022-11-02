@@ -34,6 +34,7 @@ public class WristMenu : MonoBehaviour
         {
             Time.timeScale = 1;
             animator.SetBool("Appear", false);
+            Debug.Log("Closed");
             open = false;
             float timer = 5;
             timer -= Time.deltaTime;

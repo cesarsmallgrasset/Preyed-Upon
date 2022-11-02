@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     {
 
         storm.SetActive(true);
-        houseText.SetActive(true);
+        //houseText.SetActive(true);
         float Timer = 5;
         Timer -= Time.deltaTime;
         if(Timer <= 0) houseText.SetActive(false);
@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
         {
             storm.SetActive(false);
             Instantiate(HHkey, HHkeySpawnLoc);
+            //houseText.SetActive(false);
             keySpawned = true;
         }
     }
